@@ -1,0 +1,111 @@
+<div class="catalog-page">
+  <h2 class="sr-only">Catalogo Guau Town — tienda de mascotas Arica</h2>
+
+  <header class="header">
+    <div class="logo-circle">
+      <img class="logo-image" src="assets/logo.jpg" alt="Guau Town" />
+    </div>
+    <div class="header-text">
+      <h1>Guau Town</h1>
+      <p>Tu tienda de mascotas en Arica, Chile</p>
+      <div class="header-badges">
+        <span class="badge"><i class="ti ti-truck" aria-hidden="true"></i> Delivery diario</span>
+        <span class="badge"><i class="ti ti-map-pin" aria-hidden="true"></i> 3 locales</span>
+        <span class="badge"><i class="ti ti-phone" aria-hidden="true"></i> +56 9 8334 7085</span>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="section-title"><i class="ti ti-building-store" aria-hidden="true"></i> Selecciona una tienda</div>
+    <div class="stores-grid">
+      @for (store of stores; track store.id) {
+        <button
+          class="store-card"
+          type="button"
+          [class.active]="store.id === currentStore"
+          (click)="setStore(store.id)"
+        >
+          <div class="store-name">
+            @if (store.icon) {
+              <i [class]="store.icon" aria-hidden="true"></i>
+            }
+            {{ store.name }}
+          </div>
+          <div class="store-hours">{{ store.hours }}</div>
+          <span class="store-badge">{{ store.badge }}</span>
+        </button>
+      }
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title"><i class="ti ti-basket" aria-hidden="true"></i> Catalogo</div>
+    <div class="categories">
+      @for (cat of categories; track cat.id) {
+        <button
+          class="cat-btn"
+          type="button"
+          [class.active]="cat.id === currentCategory"
+          (click)="setCategory(cat.id)"
+        >
+          <i [class]="cat.icon" aria-hidden="true"></i>
+          {{ cat.label }}
+        </button>
+      }
+    </div>
+
+    <div class="products-grid">
+      @if (filteredProducts.length === 0) {
+        <div class="empty">
+          <i class="ti ti-mood-empty" aria-hidden="true"></i>
+          Sin productos con ese filtro en esta tienda.
+        </div>
+      } @else {
+        @for (product of filteredProducts; track product.name) {
+          <article class="product-card">
+            @if (product.oferta) {
+              <span class="oferta-badge">¡OFERTA!</span>
+            }
+            @if (product.images?.length) {
+              <div class="product-carousel" aria-label="Fotos del producto">
+                @for (img of product.images; track img) {
+                  <img class="product-image" [src]="img" [alt]="product.name" />
+                }
+              </div>
+            } @else if (product.image) {
+              <img class="product-image single" [src]="product.image" [alt]="product.name" />
+            } @else {
+              <div class="product-emoji" aria-hidden="true">{{ product.emoji }}</div>
+            }
+            <div class="product-name">{{ product.name }}</div>
+            <div class="product-desc">{{ product.desc }}</div>
+            <div class="price-row">
+              @if (product.priceOld) {
+                <div class="price-old">{{ product.priceOld }}</div>
+              }
+              <div class="price">{{ product.price }}</div>
+            </div>
+            <div class="stores-chips">
+              @for (storeId of product.stores; track storeId) {
+                <span class="chip">{{ storeNames[storeId] }}</span>
+              }
+            </div>
+          </article>
+        }
+      }
+    </div>
+  </section>
+
+  <section class="contact-card">
+    <div>
+      <div class="info-row"><i class="ti ti-phone" aria-hidden="true"></i> +56 9 8334 7085</div>
+      <div class="info-row"><i class="ti ti-brand-instagram" aria-hidden="true"></i> @guau_town</div>
+      <div class="info-row"><i class="ti ti-truck" aria-hidden="true"></i> Delivery todos los dias</div>
+    </div>
+    <button class="wsp-btn" type="button" (click)="openWhatsapp()">
+      <i class="ti ti-brand-whatsapp" aria-hidden="true"></i>
+      Consultar por WhatsApp
+    </button>
+  </section>
+</div>
